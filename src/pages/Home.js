@@ -6,6 +6,7 @@ import SmoothieCard from "../components/SmoothieCard"
 const Home = () => {
   const [error,setError]=useState(null)
   const [data,setData] = useState(null)
+  const [orderBy, setOrderBy] = useState('created_at')
 
   const handleDelete = (id) => {
     setData(previousData=>{
@@ -21,6 +22,7 @@ const fetchData=async()=>{
   const {data,error}=await supabase
   .from('to_do_task')
   .select()
+  .order(orderBy, {ascending: false})
   if (error) {
     setError("could not fetch data")
     setData(null)
@@ -34,14 +36,19 @@ const fetchData=async()=>{
 
 fetchData()
 
-}, [])
+}, [orderBy])
 
   return (
     <div className="page home">
       {error && (<p>{error}</p>)}
       {data && (
         <div className="smoothies">
-          {/* order-by buttons */}
+        <div className="order-by">
+            <p>Order by:</p>
+            <button onClick={() => setOrderBy('created_at')}>Time Created</button>
+            <button onClick={() => setOrderBy('title')}>Title</button>
+            <button onClick={() => setOrderBy('rating')}>Rating</button>
+          </div>
           <div className="smoothie-grid">
             {data.map(item => (
               <SmoothieCard key={item.id} onDelete={handleDelete} smoothie={item} />
