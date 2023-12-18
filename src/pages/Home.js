@@ -7,6 +7,13 @@ const Home = () => {
   const [error,setError]=useState(null)
   const [data,setData] = useState(null)
 
+  const handleDelete = (id) => {
+    setData(previousData=>{
+      return previousData.filter(item=>item.id!==id)
+    
+    })
+  }
+
 
 useEffect(() => {
 
@@ -37,7 +44,7 @@ fetchData()
           {/* order-by buttons */}
           <div className="smoothie-grid">
             {data.map(item => (
-              <SmoothieCard key={item.id} smoothie={item} />
+              <SmoothieCard key={item.id} onDelete={handleDelete} smoothie={item} />
             ))}
           </div>
         </div>
